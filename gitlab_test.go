@@ -101,7 +101,7 @@ func mustWriteHTTPResponse(t *testing.T, w io.Writer, fixturePath string) {
 	}
 }
 
-func errorOption(*retryablehttp.Request) error {
+func errorOption(req *retryablehttp.Request, opt interface{}) error {
 	return errors.New("RequestOptionFunc returns an error")
 }
 

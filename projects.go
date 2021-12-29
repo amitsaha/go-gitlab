@@ -1293,15 +1293,8 @@ func (s *ProjectsService) UploadFile(pid interface{}, content io.Reader, filenam
 	}
 	u := fmt.Sprintf("projects/%s/uploads", PathEscape(project))
 
-	req, err := s.client.UploadRequest(
-		http.MethodPost,
-		u,
-		content,
-		filename,
-		UploadFile,
-		nil,
-		options,
-	)
+	options = append(options, WithFile(content, filename, UploadFile))
+	req, err := s.client.NewRequest(http.MethodPost, u, nil, options)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -1326,15 +1319,8 @@ func (s *ProjectsService) UploadAvatar(pid interface{}, avatar io.Reader, option
 	}
 	u := fmt.Sprintf("projects/%s", PathEscape(project))
 
-	req, err := s.client.UploadRequest(
-		http.MethodPut,
-		u,
-		avatar,
-		"avatar.png",
-		UploadAvatar,
-		nil,
-		options,
-	)
+	options = append(options, WithFile(avatar, "avatar.png", UploadAvatar))
+	req, err := s.client.NewRequest(http.MethodPut, u, nil, options)
 	if err != nil {
 		return nil, nil, err
 	}

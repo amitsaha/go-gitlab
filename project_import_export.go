@@ -174,15 +174,8 @@ type ImportFileOptions struct {
 // GitLab API docs:
 // https://docs.gitlab.com/ce/api/project_import_export.html#import-a-file
 func (s *ProjectImportExportService) ImportFromFile(archive io.Reader, opt *ImportFileOptions, options ...RequestOptionFunc) (*ImportStatus, *Response, error) {
-	req, err := s.client.UploadRequest(
-		http.MethodPost,
-		"projects/import",
-		archive,
-		"archive.tar.gz",
-		UploadFile,
-		opt,
-		options,
-	)
+	options = append(options, WithFile(archive, "archive.tar.gz", UploadFile))
+	req, err := s.client.NewRequest(http.MethodPost, "projects/import", opt, options)
 	if err != nil {
 		return nil, nil, err
 	}
